@@ -1,0 +1,16 @@
+---
+tasks:
+  - name: Get vector distrib
+    get_url:
+      validate_certs: false
+      url: https://packages.timber.io/vector/0.24.0/vector-0.24.0-1.x86_64.rpm
+      dest: ./vector-0.24.0.rpm
+  - name: Install vector
+    become: true
+    yum:
+      disable_gpg_check: yes
+      name:
+        - vector-0.24.0.rpm
+  - name: Copy config
+    become: true
+    template: 'src=vector.j2 dest=/etc/vector/vector.toml owner=root group=root mode=0664'
