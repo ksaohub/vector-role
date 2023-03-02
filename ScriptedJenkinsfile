@@ -1,0 +1,26 @@
+node("linux"){
+    def prodRunWithFlags = env.prod_run
+    stage("Git checkout"){
+        git branch: 'main', credentialsId: '7f56f009-b552-4583-8678-4313f1cbaf40', url: 'git@github.com:ksaohub/vector-role.git'
+    }
+    // stage("Sample define secret_check"){
+    //     secret_check=true
+    // }
+    stage("Run playbook"){
+        if (prodRunWithFlags == 'true'){
+            sh """
+                export PATH=$PATH:/usr/local/bin
+                export PATH=$PATH:/home/jenkins/.local/bin
+                ansible-playbook --check --diff site.yml -i inventory/prod.yml
+            """
+        }
+        else{
+            sh """
+                export PATH=$PATH:/usr/local/bin
+                export PATH=$PATH:/home/jenkins/.local/bin
+                ansible-playbook site.yml -i inventory/prod.yml
+            """
+        }
+        
+    }
+}
