@@ -1,0 +1,15 @@
+---
+- name: Install Vector
+  hosts: vector
+  tasks:
+    - name: Get vector distrib
+      get_url:
+        validate_certs: false
+        url: https://packages.timber.io/vector/0.24.0/vector-0.24.0-1.x86_64.rpm
+        dest: ./vector-0.24.0.rpm
+    - name: Install vector
+      become: true
+      yum:
+        disable_gpg_check: yes
+        name:
+          - vector-0.24.0.rpm
